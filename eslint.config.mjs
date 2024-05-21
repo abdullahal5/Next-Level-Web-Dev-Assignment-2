@@ -1,10 +1,11 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import globals from "globals";
+import prettierConfig from "eslint-config-prettier";
 
 export default tseslint.config(
   {
-    ignores: ["**/node_modules/", ".dist/"],
+    ignores: ["./node_modules", "**/dist/", ".env"],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -13,6 +14,7 @@ export default tseslint.config(
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
+  prettierConfig,
   {
     rules: {
       "no-unused-vars": "error",
@@ -21,5 +23,5 @@ export default tseslint.config(
       "prefer-const": "error",
       "no-console": "warn",
     },
-  }
+  },
 );
