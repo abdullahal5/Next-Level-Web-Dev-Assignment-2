@@ -8,16 +8,16 @@ const OrderSchema = new Schema<TOrders>({
   },
   productId: {
     type: String,
-    required: true
+    required: true,
   },
   price: {
     type: Number,
-    required: true
+    required: true,
   },
   quantity: {
     type: Number,
-    required: true
+    required: true,
   },
 });
 
-export const OrderModel = model<TOrders>("Order", OrderSchema)
+export const OrderModel = model<TOrders>("Order", OrderSchema);

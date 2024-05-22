@@ -10,7 +10,7 @@ app.use(cors());
 
 // routes
 app.use("/api", productRoutes);
-app.use("/api", orderRoutes)
+app.use("/api", orderRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome Developers !!!");
