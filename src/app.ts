@@ -29,7 +29,6 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
     success: false,
     message: error.message,
   });
-  next();
 });
 
 export default app;
