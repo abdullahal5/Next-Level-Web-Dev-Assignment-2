@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 // routes
-app.use("/api", productRoutes)
+app.use("/api", productRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome Developers !!!");
