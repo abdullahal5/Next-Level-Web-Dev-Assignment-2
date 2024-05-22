@@ -12,12 +12,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderControllers = void 0;
 const orders_service_1 = require("./orders.service");
 const products_model_1 = require("../products/products.model");
+const orders_validation_1 = require("./orders.validation");
 // create order
 const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
+        const { error, value } = orders_validation_1.joiOrderValidationSchema.validate(body, {
+            convert: false,
+        });
+        if (error) {
+            return res.status(404).json({
+                success: false,
+                message: error === null || error === void 0 ? void 0 : error.message,
+            });
+        }
         // Create the order
-        const result = yield orders_service_1.OrderService.createOrdersIntoDB(body);
+        const result = yield orders_service_1.OrderService.createOrdersIntoDB(value);
         if (!result) {
             return res.status(404).json({
                 success: false,

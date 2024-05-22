@@ -1,15 +1,27 @@
 import { Request, Response } from "express";
 import { ProductService } from "./products.service";
+import { joiValidationSchema } from "./products.validation";
 
 // create controller
 const createProduct = async (req: Request, res: Response) => {
   try {
     const body = req.body;
 
-    const result = await ProductService.createProductsIntoDB(body);
+    const { error, value } = joiValidationSchema.validate(body, {
+      convert: false,
+    });
+
+    if (error) {
+      return res.status(404).json({
+        success: false,
+        message: error?.message,
+      });
+    }
+
+    const result = await ProductService.createProductsIntoDB(value);
 
     if (!result) {
-      res.status(404).json({
+      return res.status(404).json({
         success: false,
         message: "Product Not Found",
       });
@@ -94,13 +106,21 @@ const updateProduct = async (req: Request, res: Response) => {
   const updatedContent = req.body;
   const productId = req.params.productId;
   try {
-    const result = await ProductService.UpdateAProductIntoDB(
-      productId,
-      updatedContent,
-    );
+    const { error, value } = joiValidationSchema.validate(updatedContent, {
+      convert: false,
+    });
+
+    if (error) {
+      return res.status(404).json({
+        success: false,
+        message: error?.message,
+      });
+    }
+
+    const result = await ProductService.UpdateAProductIntoDB(productId, value);
 
     if (!result) {
-      res.status(404).json({
+      return res.status(404).json({
         success: false,
         message: "Product Not Found",
       });

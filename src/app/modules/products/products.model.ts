@@ -20,31 +20,24 @@ const InvetorySchema = new Schema<TInvetory>(
 const ProductsSchema = new Schema<TProducts>({
   name: {
     type: String,
-    required: true,
   },
   description: {
     type: String,
-    required: true,
   },
   price: {
     type: Number,
-    required: true,
   },
   category: {
     type: String,
-    required: true,
   },
   tags: {
     type: [String],
-    required: true,
   },
   variants: {
     type: [VariantsSchema],
-    required: true,
   },
   inventory: {
     type: InvetorySchema,
-    required: true,
   },
 });
 

@@ -1,14 +1,26 @@
 import { Request, Response } from "express";
 import { OrderService } from "./orders.service";
 import { ProductModel } from "../products/products.model";
+import { joiOrderValidationSchema } from "./orders.validation";
 
 // create order
 const createOrder = async (req: Request, res: Response) => {
   try {
     const body = req.body;
 
+    const { error, value } = joiOrderValidationSchema.validate(body, {
+      convert: false,
+    });
+
+    if (error) {
+      return res.status(404).json({
+        success: false,
+        message: error?.message,
+      });
+    }
+
     // Create the order
-    const result = await OrderService.createOrdersIntoDB(body);
+    const result = await OrderService.createOrdersIntoDB(value);
 
     if (!result) {
       return res.status(404).json({

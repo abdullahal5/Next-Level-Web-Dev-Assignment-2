@@ -29,5 +29,6 @@ app.use((error, req, res, next) => {
         success: false,
         message: error.message,
     });
+    next(error);
 });
 exports.default = app;

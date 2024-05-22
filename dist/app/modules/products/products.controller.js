@@ -11,13 +11,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.productsControllers = void 0;
 const products_service_1 = require("./products.service");
+const products_validation_1 = require("./products.validation");
 // create controller
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
-        const result = yield products_service_1.ProductService.createProductsIntoDB(body);
+        const { error, value } = products_validation_1.joiValidationSchema.validate(body, {
+            convert: false,
+        });
+        if (error) {
+            return res.status(404).json({
+                success: false,
+                message: error === null || error === void 0 ? void 0 : error.message,
+            });
+        }
+        const result = yield products_service_1.ProductService.createProductsIntoDB(value);
         if (!result) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: "Product Not Found",
             });
@@ -97,9 +107,18 @@ const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const updatedContent = req.body;
     const productId = req.params.productId;
     try {
-        const result = yield products_service_1.ProductService.UpdateAProductIntoDB(productId, updatedContent);
+        const { error, value } = products_validation_1.joiValidationSchema.validate(updatedContent, {
+            convert: false,
+        });
+        if (error) {
+            return res.status(404).json({
+                success: false,
+                message: error === null || error === void 0 ? void 0 : error.message,
+            });
+        }
+        const result = yield products_service_1.ProductService.UpdateAProductIntoDB(productId, value);
         if (!result) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: "Product Not Found",
             });

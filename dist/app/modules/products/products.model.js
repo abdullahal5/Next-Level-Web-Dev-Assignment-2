@@ -13,31 +13,24 @@ const InvetorySchema = new mongoose_1.Schema({
 const ProductsSchema = new mongoose_1.Schema({
     name: {
         type: String,
-        required: true,
     },
     description: {
         type: String,
-        required: true,
     },
     price: {
         type: Number,
-        required: true,
     },
     category: {
         type: String,
-        required: true,
     },
     tags: {
         type: [String],
-        required: true,
     },
     variants: {
         type: [VariantsSchema],
-        required: true,
     },
     inventory: {
         type: InvetorySchema,
-        required: true,
     },
 });
 exports.ProductModel = (0, mongoose_1.model)("Product", ProductsSchema);
