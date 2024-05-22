@@ -9,27 +9,24 @@ const createProductsIntoDB = async (products: TProducts) => {
 
 // getting all data
 const GetAllProductsFromDB = async (query?: string) => {
-  try {
-    let searchText = {};
+  let searchText = {};
 
-    if (query) {
-      const regex = new RegExp(query, "i");
-      
-      searchText = {
-        $or: [
-          { name: { $regex: regex } },
-          { description: { $regex: regex } },
-          { category: { $regex: regex } },
-        ],
-      };
-      
-      const result = await ProductModel.find(searchText);
-      return result;
-    }
+  if (query) {
+    const regex = new RegExp(query, "i");
+
+    searchText = {
+      $or: [
+        { name: { $regex: regex } },
+        { description: { $regex: regex } },
+        { category: { $regex: regex } },
+      ],
+    };
+
+    const result = await ProductModel.find(searchText);
+    return result;
+  } else {
     const result = await ProductModel.find();
     return result;
-  } catch (error) {
-    return error;
   }
 };
 

@@ -17,17 +17,44 @@ const createProductsIntoDB = (products) => __awaiter(void 0, void 0, void 0, fun
     return result;
 });
 // getting all data
-const GetAllProductsFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield products_model_1.ProductModel.find();
-    return result;
+const GetAllProductsFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    let searchText = {};
+    if (query) {
+        const regex = new RegExp(query, "i");
+        searchText = {
+            $or: [
+                { name: { $regex: regex } },
+                { description: { $regex: regex } },
+                { category: { $regex: regex } },
+            ],
+        };
+        const result = yield products_model_1.ProductModel.find(searchText);
+        return result;
+    }
+    else {
+        const result = yield products_model_1.ProductModel.find();
+        return result;
+    }
 });
 // getting single data
 const GetSingleProductFromDB = (productId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield products_model_1.ProductModel.findById(productId);
     return result;
 });
+// update product
+const UpdateAProductIntoDB = (productId, updatedContent) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield products_model_1.ProductModel.findByIdAndUpdate(productId, updatedContent, { new: true });
+    return result;
+});
+// delete product
+const DeleteAProductFromDB = (productId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield products_model_1.ProductModel.findByIdAndDelete(productId);
+    return result;
+});
 exports.ProductService = {
     createProductsIntoDB,
     GetAllProductsFromDB,
     GetSingleProductFromDB,
+    UpdateAProductIntoDB,
+    DeleteAProductFromDB,
 };

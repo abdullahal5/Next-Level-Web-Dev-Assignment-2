@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ProductService } from "./products.service";
+import { TProducts } from "./products.interface";
 
 // create controller
 const createProduct = async (req: Request, res: Response) => {
@@ -32,35 +33,31 @@ const createProduct = async (req: Request, res: Response) => {
 // get all product controller
 const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const searchQuery = req.query.searchTerm as string || "";
+    const searchQuery = (req.query.searchTerm as string) || "";
+    let result;
 
     if (searchQuery) {
-      const result = await ProductService.GetAllProductsFromDB(searchQuery);
-      
-      res.status(200).json({
-        success: true,
-        message: "Product Fetched Successfylly",
-        data: result,
-      });
+      result = await ProductService.GetAllProductsFromDB(searchQuery);
     } else {
-      const result = await ProductService.GetAllProductsFromDB();
-      if (!result) {
-        res.status(404).json({
-          success: false,
-          message: "Product Not Found",
-        });
-      }
+      result = await ProductService.GetAllProductsFromDB();
+    }
 
-      res.status(200).json({
-        success: true,
-        message: "Product Fetched Successfylly",
-        data: result,
+    if (!result || result.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Product Not Found",
       });
     }
+
+    res.status(200).json({
+      success: true,
+      message: "Product Fetched Successfully",
+      data: result,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error Occured While Getting All Product",
+      message: "Error Occurred While Getting All Products",
       error: error,
     });
   }

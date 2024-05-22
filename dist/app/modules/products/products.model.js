@@ -27,6 +27,10 @@ const ProductsSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    tags: {
+        type: [String],
+        required: true,
+    },
     variants: {
         type: [VariantsSchema],
         required: true,
