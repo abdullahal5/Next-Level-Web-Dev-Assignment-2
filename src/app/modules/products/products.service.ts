@@ -13,7 +13,35 @@ const GetAllProductsFromDB = async () => {
   return result;
 };
 
+// getting single data
+const GetSingleProductFromDB = async (productId: string) => {
+  const result = await ProductModel.findById(productId);
+  return result;
+};
+
+// update product
+const UpdateAProductIntoDB = async (
+  productId: string,
+  updatedContent: object,
+) => {
+  const result = await ProductModel.findByIdAndUpdate(
+    productId,
+    updatedContent,
+    { new: true },
+  );
+  return result
+};
+
+// delete product
+const DeleteAProductFromDB = async (productId: string) => {
+  const result = await ProductModel.findByIdAndDelete(productId);
+  return result;
+};
+
 export const ProductService = {
   createProductsIntoDB,
   GetAllProductsFromDB,
+  GetSingleProductFromDB,
+  UpdateAProductIntoDB,
+  DeleteAProductFromDB,
 };
