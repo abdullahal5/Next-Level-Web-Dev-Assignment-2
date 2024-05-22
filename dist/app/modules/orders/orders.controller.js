@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderControllers = void 0;
 const orders_service_1 = require("./orders.service");
+const products_model_1 = require("../products/products.model");
 // create order
 const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -22,6 +23,17 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 message: "Order Not Found",
             });
         }
+        yield products_model_1.ProductModel.findOneAndUpdate({ _id: result.productId }, { $inc: { "inventory.quantity": -result.quantity } });
+        const updatedProduct = yield products_model_1.ProductModel.findOne({
+            _id: result.productId,
+        });
+        yield products_model_1.ProductModel.findByIdAndUpdate(result.productId, {
+            $set: {
+                "inventory.inStock": updatedProduct && updatedProduct.inventory.quantity <= 0
+                    ? false
+                    : true,
+            },
+        });
         res.status(200).json({
             success: true,
             message: "Order Created Successfylly",

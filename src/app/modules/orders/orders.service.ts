@@ -10,7 +10,7 @@ const createOrdersIntoDB = async (orders: TOrders) => {
 // get data from server
 const GetAllOrdersFromDB = async (email?: string) => {
   if (email) {
-    const result = await OrderModel.findOne({ email: email });
+    const result = await OrderModel.find({ email });
     return result;
   } else {
     const result = await OrderModel.find();

@@ -19,7 +19,7 @@ const createOrdersIntoDB = (orders) => __awaiter(void 0, void 0, void 0, functio
 // get data from server
 const GetAllOrdersFromDB = (email) => __awaiter(void 0, void 0, void 0, function* () {
     if (email) {
-        const result = yield orders_model_1.OrderModel.findOne({ email: email });
+        const result = yield orders_model_1.OrderModel.find({ email });
         return result;
     }
     else {
