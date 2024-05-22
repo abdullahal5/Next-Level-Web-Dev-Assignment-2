@@ -17,7 +17,7 @@ npm install
 ### **Some Important run command**
 
 ```bash
-step-3: install all the dependencies
+step-3: Run commands
 
 npm run lint --> show warning and errors
 npm run lint:fix --> fix errors
