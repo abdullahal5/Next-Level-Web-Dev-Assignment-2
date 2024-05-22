@@ -8,9 +8,29 @@ const createProductsIntoDB = async (products: TProducts) => {
 };
 
 // getting all data
-const GetAllProductsFromDB = async () => {
-  const result = await ProductModel.find();
-  return result;
+const GetAllProductsFromDB = async (query?: string) => {
+  try {
+    let searchText = {};
+
+    if (query) {
+      const regex = new RegExp(query, "i");
+      
+      searchText = {
+        $or: [
+          { name: { $regex: regex } },
+          { description: { $regex: regex } },
+          { category: { $regex: regex } },
+        ],
+      };
+      
+      const result = await ProductModel.find(searchText);
+      return result;
+    }
+    const result = await ProductModel.find();
+    return result;
+  } catch (error) {
+    return error;
+  }
 };
 
 // getting single data
@@ -22,14 +42,14 @@ const GetSingleProductFromDB = async (productId: string) => {
 // update product
 const UpdateAProductIntoDB = async (
   productId: string,
-  updatedContent: object,
+  updatedContent: Partial<TProducts>,
 ) => {
   const result = await ProductModel.findByIdAndUpdate(
     productId,
     updatedContent,
     { new: true },
   );
-  return result
+  return result;
 };
 
 // delete product

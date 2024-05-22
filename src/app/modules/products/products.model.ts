@@ -28,6 +28,10 @@ const ProductsSchema = new Schema<TProducts>({
     type: String,
     required: true,
   },
+  tags: {
+    type: [String],
+    required: true,
+  },
   variants: {
     type: [VariantsSchema],
     required: true,

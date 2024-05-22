@@ -8,6 +8,13 @@ const createProduct = async (req: Request, res: Response) => {
 
     const result = await ProductService.createProductsIntoDB(body);
 
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        message: "Product Not Found",
+      });
+    }
+
     res.status(200).json({
       success: true,
       message: "Product Created Successfylly",
@@ -25,13 +32,31 @@ const createProduct = async (req: Request, res: Response) => {
 // get all product controller
 const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const result = await ProductService.GetAllProductsFromDB();
+    const searchQuery = req.query.searchTerm as string || "";
 
-    res.status(200).json({
-      success: true,
-      message: "Product Fetched Successfylly",
-      data: result,
-    });
+    if (searchQuery) {
+      const result = await ProductService.GetAllProductsFromDB(searchQuery);
+      
+      res.status(200).json({
+        success: true,
+        message: "Product Fetched Successfylly",
+        data: result,
+      });
+    } else {
+      const result = await ProductService.GetAllProductsFromDB();
+      if (!result) {
+        res.status(404).json({
+          success: false,
+          message: "Product Not Found",
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "Product Fetched Successfylly",
+        data: result,
+      });
+    }
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -46,6 +71,13 @@ const getSingleProductById = async (req: Request, res: Response) => {
   try {
     const productId = req.params.productId;
     const result = await ProductService.GetSingleProductFromDB(productId);
+
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        message: "Product Not Found",
+      });
+    }
 
     res.status(200).json({
       success: true,
@@ -70,6 +102,13 @@ const updateProduct = async (req: Request, res: Response) => {
       productId,
       updatedContent,
     );
+
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        message: "Product Not Found",
+      });
+    }
 
     res.status(200).json({
       success: true,
